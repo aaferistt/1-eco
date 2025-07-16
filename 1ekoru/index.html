@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ООО "1-ЭКО"</title>
+    <!-- Подключение Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Подключение шрифта Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* Применение шрифта Inter ко всему документу */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Пользовательский класс для тени текста */
+        .text-shadow-md {
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+        .text-shadow-lg {
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+        /* Анимация для подчеркивания заголовка */
+        h2.underline-animated::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: #4CAF50;
+            margin: 10px auto;
+            border-radius: 2px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scaleX(1); }
+            50% { transform: scaleX(1.2); }
+            100% { transform: scaleX(1); }
+        }
+        
+        /* Стили для страниц */
+        .page-section {
+            display: none;
+            padding: 40px 0;
+        }
+        
+        .page-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Стиль для контейнера карты */
+        #map {
+            width: 100%;
+            height: 100%;
+            border-radius: 0.75rem; /* rounded-xl */
+            overflow: hidden; /* Обрезаем контент, который выходит за границы */
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Шапка -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between py-4 flex-wrap md:flex-nowrap gap-4">
+                <!-- Логотип и название -->
+                <div class="flex items-center space-x-4">
+                    <div class="flex-shrink-0">
+                        <svg class="h-16 w-16" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="45" stroke="#4CAF50" stroke-width="5" fill="none"/>
+                            <text x="50" y="62" font-size="30" text-anchor="middle" fill="#4CAF50" font-weight="bold">ЭКО</text>
+                        </svg>
+                    </div>
+                    <div class="hidden sm:block">
+                        <p class="text-xl font-bold text-gray-800">1-ЭКО</p>
+                        <p class="text-sm text-green-600 max-w-xs">Возим отходы, нерудные материалы, снег в Москве и Московской области</p>
+                    </div>
+                </div>
+
+                <!-- Контакты и время работы -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-8 text-sm">
+                    <div class="flex items-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                            <p class="font-semibold text-gray-800">Часы работы</p>
+                            <p class="text-gray-500">Ежедневно с 10:00 до 18:00</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                        <div>
+                            <p class="font-semibold text-gray-800">+7(903)199-14-70</p>
+                            <p class="text-gray-500">Прием заказов с 08:00 до 22:00</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        <div>
+                            <a href="mailto:dispatcher_1-eco@mail.ru" class="font-semibold text-gray-800 hover:text-green-600 transition-colors">dispatcher_1-eco@mail.ru</a>
+                            <p class="text-gray-500">Пишите в любое время</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Кнопка "Заказать звонок" -->
+                <div class="flex-shrink-0">
+                    <a href="#" class="inline-block px-6 py-2 border-2 border-green-500 text-green-500 font-semibold rounded-lg hover:bg-green-500 hover:text-white hover:shadow-lg hover:shadow-green-500/50 transition-all duration-300">
+                        Заказать звонок
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Навигационное меню -->
+    <nav class="bg-green-700 shadow-md sticky top-[96px] z-40">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center space-x-8 py-3">
+                <!-- Главная -->
+                <a href="#" data-target="home" class="text-white font-semibold py-2 px-4 rounded-md hover:bg-green-600 transition-colors duration-200">
+                    Главная
+                </a>
+                <!-- О компании -->
+                <div class="relative group">
+                    <button data-target="about" class="nav-button text-white font-semibold py-2 px-4 rounded-md hover:bg-green-600 transition-colors duration-200">
+                        О компании
+                    </button>
+                    <div class="absolute left-0 top-full w-48 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-opacity duration-200 z-10 py-2">
+                        <a href="#" data-target="about" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Описание</a>
+                        <a href="#" data-target="license" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Лицензия</a>
+                        <a href="#" data-target="sro" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Член СРО</a>
+                        <a href="#" data-target="autopark" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Наш автопарк</a>
+                    </div>
+                </div>
+
+                <!-- Услуги -->
+                <div class="relative group">
+                    <button data-target="services" class="nav-button text-white font-semibold py-2 px-4 rounded-md hover:bg-green-600 transition-colors duration-200">
+                        Услуги
+                    </button>
+                    <div class="absolute left-0 top-full w-64 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-opacity duration-200 z-10 py-2">
+                        <a href="#" data-target="construction-waste" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вывоз строительного мусора</a>
+                        <a href="#" data-target="ossig" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вывоз по ОССиГ</a>
+                        <a href="#" data-target="tko" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вывоз ТКО (ТБО, КГМ)</a>
+                        <a href="#" data-target="sewage" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Ассенизаторские услуги</a>
+                        <a href="#" data-target="materials" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Перевозка нерудных материалов</a>
+                    </div>
+                </div>
+
+                <!-- Контейнеры -->
+                <div class="relative group">
+                    <button data-target="containers" class="nav-button text-white font-semibold py-2 px-4 rounded-md hover:bg-green-600 transition-colors duration-200">
+                        Контейнеры
+                    </button>
+                    <div class="absolute left-0 top-full w-64 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-opacity duration-200 z-10 py-2">
+                        <a href="#" data-target="large-waste" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вывоз крупногабаритных отходов</a>
+                        <a href="#" data-target="industrial-waste" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вывоз промышленных отходов</a>
+                        <a href="#" data-target="food-waste" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Вывоз пищевых отходов</a>
+                    </div>
+                </div>
+
+                <!-- Отзывы -->
+                <a href="#" data-target="reviews" class="text-white font-semibold py-2 px-4 rounded-md hover:bg-green-600 transition-colors duration-200">Отзывы</a>
+
+                <!-- Контакты (кнопка теперь без выпадающего списка) -->
+                <a href="#" data-target="contacts" class="text-white font-semibold py-2 px-4 rounded-md hover:bg-green-600 transition-colors duration-200">
+                    Контакты
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Главная страница -->
+    <section id="home" class="page-section active">
+        <!-- Секция с информацией о деятельности (мусоровоз маленький по центру) -->
+        <div class="relative overflow-hidden bg-[rgb(42,171,0)]">
+            <div class="absolute inset-0 flex items-center justify-center">
+                <img src="img/carr.png" alt="[Изображение мусоровоза]" class="max-h-[400px] object-contain">
+            </div>
+
+            <div class="relative container mx-auto px-4 py-24 sm:py-32 text-center text-white">
+                <div class="max-w-4xl mx-auto">
+                    <h1 class="text-2xl md:text-3xl font-semibold mb-8 leading-relaxed text-green-200 text-shadow-md">
+                        Компания 1-ЭКО: профессиональная транспортировка отходов и материалов в Москве и области
+                    </h1>
+                    <h2 class="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight text-shadow-lg underline-animated">
+                        В составе лицензируемых видов <span class="text-green-400">деятельности</span> компания осуществляет:
+                    </h2>
+                    <p class="text-lg md:text-xl mb-12 opacity-90 text-shadow-md">Сбор и транспортирование таких видов отходов, как:</p>
+                    
+                    <div class="max-w-lg mx-auto backdrop-blur-sm bg-green-900/20 border border-white/20 p-8 rounded-2xl shadow-lg">
+                        <ul class="space-y-4 text-left text-lg">
+                            <li class="flex items-center bg-green-900/10 p-2 rounded-md">
+                                <svg class="h-6 w-6 text-green-400 mr-4 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span class="opacity-95">твердые коммунальные отходы;</span>
+                            </li>
+                            <li class="flex items-center bg-transparent p-2 rounded-md">
+                                <svg class="h-6 w-6 text-green-400 mr-4 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span class="opacity-95">отходы строительства и сноса зданий, загрязненные строительные грунты;</span>
+                            </li>
+                            <li class="flex items-center bg-green-900/10 p-2 rounded-md">
+                                <svg class="h-6 w-6 text-green-400 mr-4 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span class="opacity-95">отходы производства, в том числе шлаки;</span>
+                            </li>
+                            <li class="flex items-center bg-transparent p-2 rounded-md">
+                                <svg class="h-6 w-6 text-green-400 mr-4 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span class="opacity-95">жидкие отходы, включая фильтраты очистных сооружений;</span>
+                            </li>
+                            <li class="flex items-center bg-green-900/10 p-2 rounded-md">
+                                <svg class="h-6 w-6 text-green-400 mr-4 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span class="opacity-95">древесные отходы и др.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Секция "Наши услуги" (белый фон, мусоровоз меньшего размера) -->
+        <div class="relative min-h-[600px] flex items-center bg-white">
+            <div class="absolute inset-0 flex items-center justify-center">
+                <img src="img/truck.png" alt="[Изображение мусоровоза]" class="max-h-[400px] object-contain">
+            </div>
+            <div class="relative z-10 container mx-auto p-8">
+                <!-- Заголовок "Наши услуги" теперь в отдельном "стеклянном" контейнере -->
+                <div class="max-w-fit mx-auto mb-6 p-4 backdrop-blur-sm bg-green-900/20 border border-green-500/20 rounded-2xl shadow-lg">
+                    <h1 class="text-3xl font-bold text-white text-center">Наши услуги</h1>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-lg shadow-md p-12 min-h-[300px] flex flex-col justify-center">
+                        <h3 class="text-xl font-semibold text-green-600">Вывоз отходов</h3>
+                        <p class="text-gray-700 mt-2">Профессиональный сбор и транспортировка твердых коммунальных отходов.</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-12 min-h-[300px] flex flex-col justify-center">
+                        <h3 class="text-xl font-semibold text-green-600">Нерудные материалы</h3>
+                        <p class="text-gray-700 mt-2">Доставка и транспортировка песка, щебня и других материалов.</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-12 min-h-[300px] flex flex-col justify-center">
+                        <h3 class="text-xl font-semibold text-green-600">Вывоз снега</h3>
+                        <p class="text-gray-700 mt-2">Оперативный вывоз снега в зимний период.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Секция лицензии (теперь с PDF-ссылкой) -->
+        <div class="container mx-auto p-8">
+            <div class="text-center mb-6">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2 underline-animated">Наша лицензия</h2>
+            </div>
+            <div class="flex flex-col md:flex-row items-center gap-6 backdrop-blur-sm bg-green-900/20 border border-green-500/20 p-8 rounded-2xl shadow-lg">
+                <!-- Левая колонка для изображения и подписи -->
+                <div class="w-full md:w-1/3 flex flex-col justify-center items-center p-4">
+                    <!-- Обновленный путь к файлу лицензии -->
+                    <a href="documents/1.Лицензия  1-ЭКО 2025.pdf" target="_blank" download class="block w-full max-w-[200px] mx-auto">
+                        <img src="img/license.png" alt="Лицензия компании 1-ЭКО" class="w-full h-auto rounded-lg shadow-md">
+                    </a>
+                    <!-- Обновленный путь к файлу лицензии -->
+                    <a href="documents/1.Лицензия  1-ЭКО 2025.pdf" target="_blank" download class="text-green-600 hover:text-green-800 font-semibold text-base mt-2 block text-center">
+                        скачать лицензию pdf
+                    </a>
+                </div>
+                <!-- Правая колонка для основного текста -->
+                <div class="w-full md:w-2/3 text-left p-4"> 
+                    <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                        <span class="text-green-600 font-semibold">Лицензия от 10.06.2016г. № Л020-00113-77/00113929</span> на осуществление деятельности транспортированию отходов 1503 видов.
+                        <span class="text-green-600 font-semibold">Является членом СРО «Объединенные строители» с октября 2021 года.</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Страница "О компании" -->
+    <section id="about" class="page-section">
+        <div class="container mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-center mb-8">О компании</h2>
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <p class="text-lg mb-6">
+                    Компания осуществляет свою деятельность на территориях города Москвы, Московской области, а также по разовым договорам в других регионах РФ. Услуги оказываются с соблюдением всех нормативно-правовых актов РФ, города Москвы и других субъектов РФ. 
+                </p>
+                <p class="text-lg mb-6">
+                    В составе лицензируемых видов деятельности компания осуществляет транспортирование 1503 видов отходов:
+                </p>
+                <ul class="list-disc list-inside text-lg mb-6">
+                    <li>твердые коммунальные отходы;</li>
+                    <li>отходы строительства и сноса зданий, отходы строительных грунтов (в т.ч. в рамках АИС ОССиГ);</li>
+                    <li>отходы производств, в том числе шлаки, сланцы;</li>
+                    <li>жидкие отходы, в том числе фильтраты очистных сооружений;</li>
+                    <li>древесные отходы и т.д.;</li>
+                </ul>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-4 text-green-600">Наша миссия</h3>
+                        <p>Предоставление качественных экологических услуг с соблюдением всех норм законодательства.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-4 text-green-600">Наши ценности</h3>
+                        <p>Экологическая ответственность, надежность, соблюдение сроков, клиентоориентированность.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Страница "Услуги" -->
+    <section id="services" class="page-section">
+        <div class="container mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-center mb-8">Наши услуги</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+                    <h3 class="text-xl font-semibold text-green-600 mb-4">Вывоз строительного мусора</h3>
+                    <p class="text-gray-700 mb-4">Профессиональный вывоз строительных отходов с объектов любой сложности.</p>
+                    <a href="#" data-target="construction-waste" class="text-green-600 font-medium hover:underline">Подробнее →</a>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+                    <h3 class="text-xl font-semibold text-green-600 mb-4">Вывоз по ОССИГ</h3>
+                    <p class="text-gray-700 mb-4">Транспортировка отходов с оформлением всех необходимых документов.</p>
+                    <a href="#" data-target="ossig" class="text-green-600 font-medium hover:underline">Подробнее →</a>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+                    <h3 class="text-xl font-semibold text-green-600 mb-4">Вывоз ТКО</h3>
+                    <p class="text-gray-700 mb-4">Регулярный вывоз твердых коммунальных отходов для предприятий.</p>
+                    <a href="#" data-target="tko" class="text-green-600 font-medium hover:underline">Подробнее →</a>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+                    <h3 class="text-xl font-semibold text-green-600 mb-4">Ассенизаторские услуги</h3>
+                    <p class="text-gray-700 mb-4">Откачка и вывоз жидких бытовых и промышленных отходов.</p>
+                    <a href="#" data-target="sewage" class="text-green-600 font-medium hover:underline">Подробнее →</a>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+                    <h3 class="text-xl font-semibold text-green-600 mb-4">Перевозка нерудных материалов</h3>
+                    <p class="text-gray-700 mb-4">Доставка песка, щебня, грунта и других строительных материалов.</p>
+                    <a href="#" data-target="materials" class="text-green-600 font-medium hover:underline">Подробнее →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Страница "Контейнеры" -->
+    <section id="containers" class="page-section">
+        <div class="relative min-h-[600px] flex items-center bg-white">
+            <div class="absolute inset-0 flex items-center justify-center">
+                <!-- Изображение мусоровоза на фоне -->
+                <img src="img/truck.png" alt="[Изображение мусоровоза]" class="max-h-[400px] object-contain">
+            </div>
+            <div class="relative z-10 container mx-auto p-8">
+                <!-- Заголовок "Контейнеры" -->
+                <div class="max-w-fit mx-auto mb-6 p-4 bg-green-700 rounded-2xl shadow-lg">
+                    <h1 class="text-3xl font-bold text-white text-center">Контейнеры для отходов</h1>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Карточка контейнера 8 м³ -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col justify-between">
+                        <img src="https://placehold.co/400x250/E0F2F1/004D40?text=Контейнер+8+м³" alt="[Изображение контейнера 8 м³]" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-green-600">Контейнер 8 м³</h3>
+                            <p class="text-gray-700 mt-2">Идеально подходит для вывоза строительного мусора, бытовых отходов и небольшого объема КГМ.</p>
+                            <p class="text-gray-700 mt-2 font-bold">Объем: 8 м³</p>
+                            <p class="text-gray-700 mt-2 font-bold">Грузоподъемность: до 5 тонн</p>
+                            <a href="#" data-target="construction-waste" class="text-green-600 font-medium hover:underline mt-4 block">Подробнее →</a>
+                        </div>
+                    </div>
+                    <!-- Карточка контейнера 20 м³ -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col justify-between">
+                        <img src="https://placehold.co/400x250/E0F2F1/004D40?text=Контейнер+20+м³" alt="[Изображение контейнера 20 м³]" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-green-600">Контейнер 20 м³</h3>
+                            <p class="text-gray-700 mt-2">Для средних объемов строительного и промышленного мусора.</p>
+                            <p class="text-700 mt-2 font-bold">Объем: 20 м³</p>
+                            <p class="text-gray-700 mt-2 font-bold">Грузоподъемность: до 10 тонн</p>
+                            <a href="#" data-target="industrial-waste" class="text-green-600 font-medium hover:underline mt-4 block">Подробнее →</a>
+                        </div>
+                    </div>
+                    <!-- Карточка контейнера 27 м³ -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col justify-between">
+                        <img src="https://placehold.co/400x250/E0F2F1/004D40?text=Контейнер+27+м³" alt="[Изображение контейнера 27 м³]" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-green-600">Контейнер 27 м³</h3>
+                            <p class="text-gray-700 mt-2">Подходит для больших объемов КГМ, промышленных и пищевых отходов.</p>
+                            <p class="text-gray-700 mt-2 font-bold">Объем: 27 м³</p>
+                            <p class="text-gray-700 mt-2 font-bold">Грузоподъемность: до 15 тонн</p>
+                            <a href="#" data-target="large-waste" class="text-green-600 font-medium hover:underline mt-4 block">Подробнее →</a>
+                        </div>
+                    </div>
+                     <!-- Карточка контейнера 32 м³ -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col justify-between">
+                        <img src="https://placehold.co/400x250/E0F2F1/004D40?text=Контейнер+32+м³" alt="[Изображение контейнера 32 м³]" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-green-600">Контейнер 32 м³</h3>
+                            <p class="text-gray-700 mt-2">Максимальный объем для вывоза любых видов отходов, включая крупногабаритные.</p>
+                            <p class="text-gray-700 mt-2 font-bold">Объем: 32 м³</p>
+                            <p class="text-gray-700 mt-2 font-bold">Грузоподъемность: до 20 тонн</p>
+                            <a href="#" data-target="tko" class="text-green-600 font-medium hover:underline mt-4 block">Подробнее →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Страница "Вывоз строительного мусора" -->
+    <section id="construction-waste" class="page-section">
+        <div class="container mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-center mb-8">Вывоз строительного мусора</h2>
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <div class="flex flex-col md:flex-row gap-8">
+                    <div class="md:w-1/2">
+                        <h3 class="text-xl font-semibold mb-4 text-green-600">Описание услуги</h3>
+                        <p class="mb-6">Профессиональный вывоз строительного мусора с объектов в Москве и Московской области. Мы работаем со всеми видами строительных отходов:</p>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 text-green-500 mt-1 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Бетон, кирпич, плитка</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 text-green-500 mt-1 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Демонтажные отходы</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 text-green-500 mt-1 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Гипсокартон, штукатурка</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 text-green-500 mt-1 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Деревянные конструкции</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 text-green-500 mt-1 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Металлические конструкции</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="md:w-1/2">
+                        <h3 class="text-xl font-semibold mt-8 mb-4 text-green-600">Как заказать</h3>
+                        <p class="mb-6">Для заказа услуги позвоните нам по телефону <a href="tel:+79031991470" class="text-green-600 font-semibold">+7(903)199-14-70</a> или оставьте заявку на сайте.</p>
+                        <a href="#" class="inline-block bg-green-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-700 transition-colors">
+                            Заказать вывоз мусора
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Страница "Контакты" -->
+    <section id="contacts" class="page-section">
+        <div class="container mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-center mb-8">Контакты</h2>
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-green-600">Наши контакты</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <svg class="h-6 w-6 text-green-600 mr-4 mt-1 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                <div>
+                                    <p class="font-semibold">Адрес (почтовый/фактический):</p>
+                                    <p>125599, г.Москва, ул. Ижорская, дом 5, этаж 3, помещение I, комната 66</p>
+                                    <p class="font-semibold mt-2">Адрес (юридический):</p>
+                                    <p>117628, г. Москва, ул. Знаменские Садки, д. 11, этаж 1, помещение IV, комната 6а</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <svg class="h-6 w-6 text-green-600 mr-4 mt-1 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                </svg>
+                                <div>
+                                    <p class="font-semibold">Телефон:</p>
+                                    <p><a href="tel:+79031991470" class="hover:text-green-600">+7 (903) 199-14-70</a></p>
+                                    <p class="text-sm text-gray-500">(прием заказов с 08:00 до 22:00)</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <svg class="h-6 w-6 text-green-600 mr-4 mt-1 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                <div>
+                                    <p class="font-semibold">Электронная почта:</p>
+                                    <p><a href="mailto:dispatcher_1-eco@mail.ru" class="hover:text-green-600">dispatcher_1-eco@mail.ru</a></p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <svg class="h-6 w-6 text-green-600 mr-4 mt-1 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <div>
+                                    <p class="font-semibold">Часы работы офиса:</p>
+                                    <p>Пн-Пт: 10:00 - 18:00</p>
+                                    <p>Сб-Вс: выходные</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-green-600">Наше местоположение</h3>
+                        <!-- Контейнер для Яндекс.Карты -->
+                        <div id="map" class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-96 flex items-center justify-center">
+                            <!-- Карта будет загружена здесь -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Страница "Лицензия" -->
+    <section id="license" class="page-section">
+        <div class="container mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-center mb-8">Наша лицензия</h2>
+            <div class="flex flex-col md:flex-row items-center gap-6 backdrop-blur-sm bg-green-900/20 border border-green-500/20 p-8 rounded-2xl shadow-lg">
+                <!-- Левая колонка для изображения и подписи -->
+                <div class="w-full md:w-1/3 flex flex-col justify-center items-center p-4">
+                    <a href="documents/1.Лицензия  1-ЭКО 2025.pdf" target="_blank" download class="block w-full max-w-[200px] mx-auto">
+                        <img src="img/license.png" alt="Лицензия компании 1-ЭКО" class="w-full h-auto rounded-lg shadow-md">
+                    </a>
+                    <a href="documents/1.Лицензия  1-ЭКО 2025.pdf" target="_blank" download class="text-green-600 hover:text-green-800 font-semibold text-base mt-2 block text-center">
+                        скачать лицензию pdf
+                    </a>
+                </div>
+                <!-- Правая колонка для основного текста -->
+                <div class="w-full md:w-2/3 text-left p-4"> 
+                    <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                        <span class="text-green-600 font-semibold">Лицензия от 10.06.2016г. № Л020-00113-77/00113929</span> на осуществление деятельности транспортированию отходов 1503 видов.
+                        <span class="text-green-600 font-semibold">Является членом СРО «Объединенные строители» с октября 2021 года.</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Страница "Отзывы" -->
+    <section id="reviews" class="page-section">
+        <div class="container mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-center mb-8">Отзывы наших клиентов</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Отзыв 1 -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 flex items-center justify-center text-gray-500 text-xl font-bold">ИП</div>
+                        <div class="ml-4">
+                            <p class="font-semibold">Анонимно</p>
+                            <p class="text-sm text-gray-500">Частное лицо</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic">"Работаю с 1-ЭКО уже более 3 лет. Всегда оперативный вывоз мусора, профессиональные водители. Никаких нареканий!"</p>
+                    <div class="flex mt-4">
+                        <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                    </div>
+                </div>
+                <!-- Отзыв 2 -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 flex items-center justify-center text-gray-500 text-xl font-bold">ЕА</div>
+                        <div class="ml-4">
+                            <p class="font-semibold">Анонимно</p>
+                            <p class="text-sm text-gray-500">Частное лицо</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic">"Благодарю 1-ЭКО за оперативность и качество услуг по вывозу ТКО. Всегда вовремя, без задержек. Рекомендуем!"</p>
+                    <div class="flex mt-4">
+                        <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                    </div>
+                </div>
+                <!-- Отзыв 3 -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 flex items-center justify-center text-gray-500 text-xl font-bold">ОК</div>
+                        <div class="ml-4">
+                            <p class="font-semibold">Анонимно</p>
+                            <p class="text-sm text-gray-500">Частное лицо</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic">"Заказывал вывоз строительного мусора после ремонта. Приехали точно в срок, все убрали быстро и аккуратно. Отличный сервис!"</p>
+                    <div class="flex mt-4">
+                        <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Остальные страницы можно добавить по аналогии -->
+    <section id="autopark" class="page-section">
+        <div class="container mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-center mb-8">Наш автопарк</h2>
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <p class="text-lg mb-6">
+                    Автотранспортный парк, эксплуатируемый ООО "1-ЭКО", насчитывает 17 единиц мусоровозного спецтранспорта и состоит из:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-green-600">Портальных мусоровозов</h3>
+                        <!-- Добавлены классы w-full h-48 object-contain для фиксированного размера и сохранения пропорций -->
+                        <img src="img/Рисунок1.jpg" alt="[Изображение портального мусоровоза]" class="w-full h-48 object-contain rounded-lg shadow-md mb-4">
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-green-600">Бункеровозов</h3>
+                        <!-- Добавлены классы w-full h-48 object-contain для фиксированного размера и сохранения пропорций -->
+                        <img src="img/Рисунок2.jpg" alt="[Изображение бункеровоза]" class="w-full h-48 object-contain rounded-lg shadow-md mb-4">
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-green-600">Мультилифтов</h3>
+                        <!-- Добавлены классы w-full h-48 object-contain для фиксированного размера и сохранения пропорций -->
+                        <img src="img/Рисунок3.jpg" alt="[Изображение мультилифта]" class="w-full h-48 object-contain rounded-lg shadow-md mb-4">
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-green-600">Илососов</h3>
+                        <!-- Добавлены классы w-full h-48 object-contain для фиксированного размера и сохранения пропорций -->
+                        <img src="img/Рисунок4.jpg" alt="[Изображение илососа]" class="w-full h-48 object-contain rounded-lg shadow-md mb-4">
+                    </div>
+                </div>
+                <p class="text-lg mb-6">
+                    Навесное оборудование эксплуатируемого спецтранспорта таких фирм-производителей, как Geesinknorba, McNeilus, Faun размещены на шасси автомобильных концернов Volvo и MAN - 95% от общего количества и 5% на шасси отечественного производителя - КамАЗ и МАЗ.
+                </p>
+                <p class="text-lg mb-6">
+                    Весь спецтранспорт соответствует стандартам Евро-4 и Евро-5, оснащен системой глобального позиционирования «ГЛОНАСС» и видеорегистраторами с целью передачи в режиме реального времени данных о своевременном и качественном оказании услуг в информационные системы заказчиков.
+                </p>
+                <p class="text-lg">
+                    Имеется возможность оперативно привлечь дополнительную технику до 30 ед. от компаний-партнеров (суммарный парк более 100 ед. спецтехники и механизмов, в том числе погрузчики, илососы и самосвалы).
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="ossig" class="page-section">
+        <div class="container mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-center mb-8">Вывоз отходов по системе АИС ОССиГ</h2>
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <p class="text-lg mb-6">
+                    ООО "1-ЭКО" предлагает услуги по транспортировке отходов строительства и сноса зданий, а также загрязненных строительных грунтов в рамках Автоматизированной информационной системы учета отходов строительства и сноса (АИС ОССиГ). Мы обеспечиваем полное соответствие всем требованиям законодательства и оперативную транспортировку отходов.
+                </p>
+                <p class="text-lg mb-6">
+                    Наши преимущества:
+                </p>
+                <ul class="list-disc list-inside text-lg mb-6">
+                    <li>Оформление всей необходимой документации в АИС ОССиГ.</li>
+                    <li>Соблюдение сроков и графика вывоза.</li>
+                    <li>Использование современного автопарка, соответствующего экологическим стандартам.</li>
+                    <li>Индивидуальный подход к каждому клиенту.</li>
+                </ul>
+                <p class="text-lg">
+                    Для заказа услуги и получения консультации свяжитесь с нами по телефону или оставьте заявку на сайте.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="tko" class="page-section">
+        <div class="container mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-center mb-8">Вывоз ТКО (ТБО, КГМ)</h2>
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <p class="text-lg mb-6">
+                    Компания "1-ЭКО" предлагает комплексные услуги по вывозу твердых коммунальных отходов (ТКО), включая твердые бытовые отходы (ТБО) и крупногабаритный мусор (КГМ), для частных лиц, предприятий и организаций в Москве и Московской области. Мы гарантируем своевременный и экологически безопасный вывоз отходов, соответствующий всем санитарным нормам и законодательству РФ.
+                </p>
+                <p class="text-lg mb-6">
+                    Наши услуги включают:
+                </p>
+                <ul class="list-disc list-inside text-lg mb-6">
+                    <li>Регулярный вывоз ТКО по установленному графику.</li>
+                    <li>Оперативный вывоз КГМ (старая мебель, бытовая техника, строительные отходы).</li>
+                    <li>Предоставление контейнеров различного объема (от 8 до 32 м³) для сбора отходов.</li>
+                    <li>Оформление всей необходимой документации.</li>
+                    <li>Гибкие условия сотрудничества и индивидуальный подход к каждому клиенту.</li>
+                </ul>
+                <p class="text-lg">
+                    Мы используем современную спецтехнику, что позволяет контролировать процесс вывоза и обеспечивать его эффективность. Свяжитесь с нами, чтобы узнать подробнее о тарифах и условиях сотрудничества.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="sewage" class="page-section">
+        <div class="container mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-center mb-8">Ассенизаторские услуги</h2>
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <p class="text-lg mb-6">
+                    ООО "1-ЭКО" предоставляет полный спектр ассенизаторских услуг для частных домовладений, промышленных предприятий и коммерческих объектов в Москве и Московской области. Мы специализируемся на профессиональной откачке и транспортировке жидких бытовых и промышленных отходов, обеспечивая чистоту и экологическую безопасность.
+                </p>
+                <p class="text-lg mb-6">
+                    Мы используем современное оборудование и специализированную технику, что позволяет эффективно справляться с задачами любой сложности. Все работы проводятся в строгом соответствии с санитарными нормами и экологическим законодательством.
+                </p>
+                <p class="text-lg">
+                    Для заказа ассенизаторских услуг и получения подробной консультации по тарифам и условиям сотрудничества, пожалуйста, свяжитесь с нами по телефону <a href="tel:+79031991470" class="text-green-600 font-semibold"> +7(903)199-14-70</a>.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="materials" class="page-section">
+        <div class="container mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-center mb-8">Перевозка нерудных материалов</h2>
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <p class="text-lg mb-6">
+                    Компания "1-ЭКО" предлагает услуги по оперативной и надежной перевозке нерудных материалов в Москве и Московской области. Мы располагаем собственным автопарком специализированной техники, что позволяет нам гарантировать своевременную доставку и высокое качество услуг.
+                </p>
+                <p class="text-lg mb-6">
+                    Мы перевозим следующие виды нерудных материалов:
+                </p>
+                <ul class="list-disc list-inside text-lg mb-6">
+                    <li>Песок (карьерный, речной, мытый, сеяный).</li>
+                    <li>Щебень (гранитный, гравийный, известняковый) различных фракций.</li>
+                    <li>Грунт (плодородный, растительный, для отсыпки).</li>
+                    <li>Керамзит, ПГС, ОПГС.</li>
+                    <li>Асфальтовая крошка.</li>
+                </ul>
+                <p class="text-lg mb-6">
+                    Наши преимущества:
+                </p>
+                <ul class="list-disc list-inside text-lg mb-6">
+                    <li>Собственный автопарк самосвалов различной грузоподъемности.</li>
+                    <li>Опытные водители, знающие особенности транспортировки сыпучих грузов.</li>
+                    <li>Соблюдение сроков доставки и гибкий график работы.</li>
+                    <li>Конкурентные цены и индивидуальный подход к каждому заказу.</li>
+                    <li>Работаем как с крупными строительными компаниями, так и с частными лицами.</li>
+                </ul>
+                <p class="text-lg">
+                    Для расчета стоимости и заказа перевозки нерудных материалов, пожалуйста, свяжитесь с нами по телефону <a href="tel:+79031991470" class="text-green-600 font-semibold"> +7(903)199-14-70</a>.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="large-waste" class="page-section">
+        <div class="container mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-center mb-8">Вывоз крупногабаритных отходов</h2>
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <p class="text-lg mb-6">
+                    Компания "1-ЭКО" предоставляет услуги по вывозу крупногабаритных отходов (КГО) в Москве и Московской области. Мы поможем вам избавиться от старой мебели, бытовой техники, строительного мусора и других объемных предметов, которые не помещаются в стандартные контейнеры.
+                </p>
+                <p class="text-lg mb-6">
+                    Наши услуги по вывозу КГО включают:
+                </p>
+                <ul class="list-disc list-inside text-lg mb-6">
+                    <li>Вывоз старой мебели (шкафы, диваны, кровати, столы и т.д.).</li>
+                    <li>Утилизация бытовой техники (холодильники, стиральные машины, плиты).</li>
+                    <li>Вывоз строительного мусора после ремонта или демонтажа.</li>
+                    <li>Очистка территорий от крупного мусора.</li>
+                    <li>Предоставление контейнеров подходящего объема для сбора КГО.</li>
+                </ul>
+                <p class="text-lg mb-6">
+                    Мы используем специализированную технику, включая бункеровозы и мультилифты, что позволяет нам оперативно и эффективно вывозить крупногабаритные отходы любого типа. Все работы выполняются в соответствии с экологическими нормами и правилами.
+                </p>
+                <p class="text-lg">
+                    Для заказа услуги по вывозу крупногабаритных отходов и уточнения стоимости, пожалуйста, свяжитесь с нами по телефону <a href="tel:+79031991470" class="text-green-600 font-semibold"> +7(903)199-14-70</a>.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="industrial-waste" class="page-section">
+        <div class="container mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-center mb-8">Вывоз промышленных отходов</h2>
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <p class="text-lg mb-6">
+                    ООО "1-ЭКО" предлагает услуги по вывозу промышленных отходов в Москве и Московской области. Мы работаем с предприятиями различных отраслей, обеспечивая безопасную и экологически ответственную транспортировку отходов производства.
+                </p>
+                <p class="text-lg mb-6">
+                    Мы осуществляем вывоз следующих видов промышленных отходов:
+                </p>
+                <ul class="list-disc list-inside text-lg mb-6">
+                    <li>Отходы производства (шлаки, сланцы, отходы металлообработки).</li>
+                    <li>Древесные отходы, опилки, стружка.</li>
+                    <li>Отходы полимерных материалов, пластика, резины.</li>
+                    <li>Отходы текстильной промышленности.</li>
+                    <li>Отходы пищевой промышленности.</li>
+                </ul>
+                <p class="text-lg mb-6">
+                    Наши преимущества:
+                </p>
+                <ul class="list-disc list-inside text-lg mb-6">
+                    <li>Наличие всех необходимых лицензий и разрешений на работу с промышленными отходами.</li>
+                    <li>Собственный парк специализированной техники (мусоровозы, бункеровозы, мультилифты).</li>
+                    <li>Разработка индивидуальных графиков вывоза, соответствующих потребностям вашего предприятия.</li>
+                    <li>Полное документальное сопровождение и соблюдение всех требований законодательства.</li>
+                </ul>
+                <p class="text-lg">
+                    Для получения консультации, расчета стоимости и заключения договора на вывоз промышленных отходов, пожалуйста, свяжитесь с нами по телефону <a href="tel:+79031991470" class="text-green-600 font-semibold"> +7(903)199-14-70</a>.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="food-waste" class="page-section">
+        <div class="container mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-center mb-8">Вывоз пищевых отходов</h2>
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <p class="text-lg mb-6">
+                    Компания "1-ЭКО" предоставляет услуги по транспортировке пищевых отходов для предприятий общественного питания, магазинов, рынков и других организаций в Москве и Московской области. Мы обеспечиваем регулярный и санитарно безопасный вывоз пищевых отходов, соблюдая все необходимые нормы и требования.
+                </p>
+                <p class="text-lg mb-6">
+                    Наши услуги по вывозу пищевых отходов включают:
+                </p>
+                <ul class="list-disc list-inside text-lg mb-6">
+                    <li>Регулярный вывоз пищевых отходов по согласованному графику.</li>
+                    <li>Предоставление специализированных контейнеров для сбора пищевых отходов.</li>
+                    <li>Транспортировка отходов на специализированные полигоны для дальнейшей переработки или захоронения.</li>
+                    <li>Оформление всей необходимой документации и отчетности.</li>
+                    <li>Соблюдение санитарных норм и правил при сборе и транспортировке.</li>
+                </ul>
+                <p class="text-lg mb-6">
+                    Мы гарантируем своевременность и чистоту выполнения работ, используя современную специализированную технику. Наша цель — обеспечить эффективное и безопасное управление пищевыми отходами для наших клиентов.
+                </p>
+                <p class="text-lg">
+                    Для получения подробной информации, расчета стоимости и заключения договора на вывоз пищевых отходов, пожалуйста, свяжитесь с нами по телефону <a href="tel:+79031991470" class="text-green-600 font-semibold"> +7(903)199-14-70</a>.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="sro" class="page-section">
+        <div class="container mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-center mb-8">Член СРО</h2>
+            <div class="bg-white rounded-xl shadow-lg p-8 text-center">
+                <p class="text-lg text-gray-700 leading-relaxed">
+                    Компания ООО "1-Эко" является членом Ассоциации Саморегулируемой организации "Объединенные строители".
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Добавьте скрипт для переключения страниц в конец body -->
+    <script>
+        // Функция для переключения страниц
+        function showPage(pageId) {
+            // Скрыть все страницы
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Показать выбранную страницу
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                
+                // Прокрутить к верху страницы
+                window.scrollTo(0, 0);
+            }
+
+            // Если это страница контактов, инициализируем карту
+            if (pageId === 'contacts') {
+                initMap();
+            }
+        }
+
+        // Обработчики для всех навигационных элементов
+        document.querySelectorAll('[data-target]').forEach(element => {
+            element.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetPage = this.getAttribute('data-target');
+                showPage(targetPage);
+            });
+        });
+
+        // Обработчик для кнопки "Заказать звонок"
+        document.querySelectorAll('a[href="#"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Удален вызов alert(), чтобы избежать модального окна
+                // Вместо этого можно добавить логику для открытия формы заказа звонка
+                console.log('Нажата кнопка "Заказать звонок"'); 
+            });
+        });
+
+        // Обработчик для ссылок "Подробнее" на странице услуг
+        document.querySelectorAll('a[data-target]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetPage = this.getAttribute('data-target');
+                showPage(targetPage);
+            });
+        });
+
+        // Инициализация карты Яндекс
+        function initMap() {
+            // Проверяем, загружен ли API Яндекс.Карт
+            if (typeof ymaps === 'undefined') {
+                // Если нет, загружаем его
+                const script = document.createElement('script');
+                script.src = 'https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=YOUR_API_KEY'; // Замените YOUR_API_KEY на ваш ключ API
+                script.onload = () => {
+                    ymaps.ready(createMap);
+                };
+                document.head.appendChild(script);
+            } else {
+                // Если API уже загружен, сразу создаем карту
+                ymaps.ready(createMap);
+            }
+        }
+
+        function createMap() {
+            // Координаты для адреса "ул. Ижорская, дом 5"
+            // Используем приблизительные координаты, так как точные могут меняться
+            // Для получения точных координат можно использовать геокодер Яндекс.Карт
+            const coords = [55.8824, 37.5028]; // Примерные координаты для ул. Ижорская, Москва
+
+            const myMap = new ymaps.Map('map', {
+                center: coords, // Центр карты
+                zoom: 16 // Уровень масштабирования
+            }, {
+                searchControlProvider: 'yandex#search'
+            });
+
+            // Создаем метку на карте
+            const placemark = new ymaps.Placemark(coords, {
+                balloonContent: '<strong>1-ЭКО</strong><br>125599, г.Москва, ул. Ижорская, дом 5, этаж 3, помещение I, комната 66'
+            }, {
+                preset: 'islands#icon',
+                iconColor: '#0095b6'
+            });
+
+            myMap.geoObjects.add(placemark);
+        }
+
+        // Вызываем initMap при загрузке страницы, если активна страница контактов
+        document.addEventListener('DOMContentLoaded', () => {
+            if (document.getElementById('contacts').classList.contains('active')) {
+                initMap();
+            }
+        });
+    </script>
+</body>
+</html>
