@@ -8,10 +8,9 @@ require_once 'PHPMailer/Exception.php';
 require_once 'PHPMailer/PHPMailer.php';
 require_once 'PHPMailer/SMTP.php';
 
-$subject = 'Заявка на скупку техники {$domain} #' . time();
+$subject = 'Заявка c сайта' . time();
 $name = htmlspecialchars($_POST['name']);
 $phone = htmlspecialchars($_POST['phone']);
-$to = 'scrum360@yandex.ru, info@utiltehnika.ru'; // '
 
 $message = '
 <html>
